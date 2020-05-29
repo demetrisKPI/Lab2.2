@@ -4,7 +4,7 @@ import org.knowm.xchart.XYChartBuilder;
 
 import java.util.Random;
 
-public class Harmonic {
+class Harmonic {
   private int countOfHarmonics;
   private int limitFrequency;
   private int countOfDescreteCalls;
@@ -140,7 +140,7 @@ public class Harmonic {
   }
 }
 
-public class FastFourier extends Harmonic {
+class FastFourier extends Harmonic {
     public FastFourier(int countOfHarmonics, int limitFrequency, int countOfDescreteCalls) {
         super(countOfHarmonics, limitFrequency, countOfDescreteCalls);
     }
@@ -174,7 +174,7 @@ public class Main {
         }
 
         XYChart chart = new XYChartBuilder().width(600).height(400).title("x(t)").xAxisTitle("t").yAxisTitle("x").build();
-        double[] signals = harmonic.calculateSignalsForResultingharmonic();
+        double[] signals = harmonic.calculateSignalsForResultingHarmonic();
         chart.addSeries("Fourier Function", count, harmonic.calculate(signals));
         new SwingWrapper<>(chart).displayChart();
     }
