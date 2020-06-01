@@ -118,6 +118,15 @@ class Harmonic {
         return dft_final;
     }
 
+  public Map<Integer,Double> getCoefficientsMap(int N){
+        Map<Integer, Double> coefficients = new HashMap<>();
+        for (int p = 0; p < N; p++) {
+            for (int k = 0; k < N; k++) {
+                coefficients.putIfAbsent((p*k) % N, 2 * Math.PI * p * k / N);
+            }
+        }
+        return  coefficients;
+    }
 
   public int getCountOfHarmonics() {
     return countOfHarmonics;
@@ -165,7 +174,7 @@ class FastFourier extends Harmonic {
         super(countOfHarmonics, limitFrequency, countOfDescreteCalls);
     }
 
-    public double[] calculate(double[] signals){
+    public double[] calculateFFT(double[] signals){
         int N = signals.length;
         double[] fft = new double[N];
         double fourierReal_1 = 0, fourierReal_2 = 0, fourierImaginary_1 = 0, fourierImaginary_2 = 0;
@@ -195,7 +204,7 @@ public class Main {
 
         XYChart chart = new XYChartBuilder().width(600).height(400).title("x(t)").xAxisTitle("t").yAxisTitle("x").build();
         double[] signals = harmonic.calculateSignalsForResultingHarmonic();
-        chart.addSeries("Fourier Function", count, harmonic.calculate(signals));
+        chart.addSeries("Fourier Function", count, harmonic.calculateFFT(signals));
 
         long[] DFTTime = new long[100];
         long[] FFTTime = new long[100];
