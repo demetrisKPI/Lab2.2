@@ -99,6 +99,26 @@ class Harmonic {
     return correlation_arr;
   }
 
+  public double[] calculateDFT(double[] signalsOfResultingHarmonic){
+        int N = signalsOfResultingHarmonic.length;
+
+        Map<Integer, Double> coefficients = getCoefficientsMap(N);
+
+        double[] dft_real = new double[N];
+        double[] dft_imaginary = new double[N];
+        double[] dft_final = new double[N];
+
+        for (int p = 0; p < N; p++) {
+            for (int k = 0; k < N; k++) {
+                dft_real[p] += signalsOfResultingHarmonic[k] * Math.cos(coefficients.get((p*k) % N));
+                dft_imaginary[p] += signalsOfResultingHarmonic[k] * Math.sin(coefficients.get((p*k) % N));
+            }
+            dft_final[p] = Math.sqrt(Math.pow(dft_real[p],2) + Math.pow(dft_imaginary[p],2));
+        }
+        return dft_final;
+    }
+
+
   public int getCountOfHarmonics() {
     return countOfHarmonics;
   }
@@ -176,6 +196,31 @@ public class Main {
         XYChart chart = new XYChartBuilder().width(600).height(400).title("x(t)").xAxisTitle("t").yAxisTitle("x").build();
         double[] signals = harmonic.calculateSignalsForResultingHarmonic();
         chart.addSeries("Fourier Function", count, harmonic.calculate(signals));
+
+        long[] DFTTime = new long[100];
+        long[] FFTTime = new long[100];
+
+        for (int i1 = 0; i1 < 100; i1++) {
+            long time = System.currentTimeMillis();
+            harmonic.calculateFFT(signals);
+            FFTTime[i1] = System.currentTimeMillis() - time;
+
+            time = System.currentTimeMillis();
+            harmonic.calculateDFT(signals);
+            FFTTime[i1] = System.currentTimeMillis() - time;
+        }
+        int tmp = 0, tmp1 = 0;
+        for (int j = 1; j < FFTTime.length; j++) {
+          tmp += FFTTime[0];
+          tmp1 += DFTTime[0];
+        }
+
+        tmp /= FFTTime.length;
+        tmp1 /= FFTTime.length;
+
+        System.out.println("Середній час виконання DFT: " + tmp);
+        System.out.println("Середній час виконання FFT: " + tmp1);
+
         new SwingWrapper<>(chart).displayChart();
     }
 }
