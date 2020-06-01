@@ -1,7 +1,8 @@
-import org.knowm.xchart.SwingWrapper;
-import org.knowm.xchart.XYChart;
-import org.knowm.xchart.XYChartBuilder;
-
+//import org.knowm.xchart.SwingWrapper;
+//import org.knowm.xchart.XYChart;
+//import org.knowm.xchart.XYChartBuilder;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 class Harmonic {
@@ -126,7 +127,7 @@ class Harmonic {
             }
         }
         return  coefficients;
-    }
+  }
 
   public int getCountOfHarmonics() {
     return countOfHarmonics;
@@ -202,9 +203,9 @@ public class Main {
             count[k] = k;
         }
 
-        XYChart chart = new XYChartBuilder().width(600).height(400).title("x(t)").xAxisTitle("t").yAxisTitle("x").build();
+        //XYChart chart = new XYChartBuilder().width(600).height(400).title("x(t)").xAxisTitle("t").yAxisTitle("x").build();
         double[] signals = harmonic.calculateSignalsForResultingHarmonic();
-        chart.addSeries("Fourier Function", count, harmonic.calculateFFT(signals));
+        //chart.addSeries("Fourier Function", count, harmonic.calculateFFT(signals));
 
         long[] DFTTime = new long[100];
         long[] FFTTime = new long[100];
@@ -216,20 +217,21 @@ public class Main {
 
             time = System.currentTimeMillis();
             harmonic.calculateDFT(signals);
-            FFTTime[i1] = System.currentTimeMillis() - time;
+            DFTTime[i1] = System.currentTimeMillis() - time;
         }
-        int tmp = 0, tmp1 = 0;
+        int tmp = 0;
+        int tmp1 = 0;
         for (int j = 1; j < FFTTime.length; j++) {
           tmp += FFTTime[0];
           tmp1 += DFTTime[0];
         }
 
         tmp /= FFTTime.length;
-        tmp1 /= FFTTime.length;
+        tmp1 /= DFTTime.length;
 
-        System.out.println("Середній час виконання DFT: " + tmp);
-        System.out.println("Середній час виконання FFT: " + tmp1);
+        System.out.println("Середній час виконання FFT: " + tmp);
+        System.out.println("Середній час виконання DFT: " + tmp1);
 
-        new SwingWrapper<>(chart).displayChart();
+        //new SwingWrapper<>(chart).displayChart();
     }
 }
